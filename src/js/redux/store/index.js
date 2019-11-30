@@ -2,7 +2,7 @@ import {createStore, applyMiddleware, compose} from 'redux';
 import rootReducer                             from '../reducers/index';
 import {forbiddenWordsMiddleware}              from '../middlewares/forbiddenWordsMiddleware';
 import createSagaMiddleware                    from 'redux-saga';
-import apiSaga                                 from '../sagas/api-saga';
+import apiSaga                                 from '../sagas/index';
 
 
 const initialiseSagaMiddleware = createSagaMiddleware();

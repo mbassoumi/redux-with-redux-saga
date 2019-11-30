@@ -1,11 +1,11 @@
 import {takeEvery, call, put}                     from 'redux-saga/effects';
 import {API_ERRORED, DATA_LOADED, DATA_REQUESTED} from '../../constants/action-types';
 
-export default function* watcherSaga() {
-    yield takeEvery(DATA_REQUESTED, workerSaga);
+export default function* watchArticle() {
+    yield takeEvery(DATA_REQUESTED, articleWorker);
 }
 
-function* workerSaga() {
+function* articleWorker() {
     try {
         const payload = yield call(getData);
         yield put({type: DATA_LOADED, payload});

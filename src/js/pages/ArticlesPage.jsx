@@ -1,7 +1,16 @@
-import React, {useState, useMemo}                                    from 'react';
-import {useDispatch, useSelector}                                    from 'react-redux';
-import {MemorizedArticle}                                            from './components/Article';
-import {addArticle, fetchArticles, removeAllArticles, removeArticle} from './actions';
+import React, {useState, useMemo}                                                                      from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {MemorizedArticle}         from './components/Article';
+import {MemorizedComment}         from './components/Comment';
+import {
+    addArticle,
+    fetchArticles,
+    fetchComments,
+    removeAllArticles,
+    removeAllComments,
+    removeArticle,
+    removeComment
+}                                 from './actions';
 
 
 const articlesStyle = {
@@ -13,6 +22,7 @@ const articlesStyle = {
 const ArticlesPage = () => {
 
     const articles = useSelector(state => state.articles);
+    const comments = useSelector(state => state.comments);
     const dispatch = useDispatch();
 
     const [title, setTitle] = useState(null);
@@ -21,12 +31,20 @@ const ArticlesPage = () => {
     const deleteArticle = (id) => {
         dispatch(removeArticle({id}));
     };
+    const deleteComment = (id) => {
+        dispatch(removeComment({id}));
+    };
 
 
     const articlesList = useMemo(() => articles.map((article, index) => (
         <MemorizedArticle key={index} body={article.body} id={article.id} title={article.title}
                           onDelete={deleteArticle}/>
     )), [articles]);
+
+    const commentsList = useMemo(() => comments.map((comment, index) => (
+        <MemorizedComment key={index} id={comment.id} name={comment.name} email={comment.email} body={comment.body}
+                          onDelete={deleteComment}/>
+    )), [comments]);
 
 
     return (
@@ -44,9 +62,17 @@ const ArticlesPage = () => {
                     () => dispatch(fetchArticles())
                 }>Fetch articles from https://jsonplaceholder.typicode.com/posts
                 </button>
-                <hr/>
                 <button onClick={
                     () => dispatch(removeAllArticles())
+                }>Remove All Articles
+                </button>
+                <hr/>
+                <button onClick={
+                    () => dispatch(fetchComments())
+                }>fetch comments from https://jsonplaceholder.typicode.com/comments
+                </button>
+                <button onClick={
+                    () => dispatch(removeAllComments())
                 }>Remove All Articles
                 </button>
             </div>
@@ -54,6 +80,11 @@ const ArticlesPage = () => {
                 <h1>Articles</h1>
                 {articlesList}
             </div>
+            <div style={articlesStyle}>
+                <h1>Comments</h1>
+                {commentsList}
+            </div>
+
         </div>
     );
 };
